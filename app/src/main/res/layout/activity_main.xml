@@ -20,4 +20,16 @@
             android:layout_height="match_parent" />
 
     </com.emmanuel.mojidemo.IndexHorizontalScrollView>
+
+    <!--<ImageView-->
+        <!--android:id="@+id/iv1"-->
+        <!--android:src="@mipmap/hour24_hint"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
+
+    <!--<ImageView-->
+        <!--android:layout_below="@+id/iv1"-->
+        <!--android:src="@mipmap/hour_24_float"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
 </RelativeLayout>

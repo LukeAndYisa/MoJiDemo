@@ -9,6 +9,7 @@ import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
@@ -45,6 +46,7 @@ public class Today24HourView extends View{
     private int maxScrollOffset = 0;//滚动条最长滚动距离
     private int scrollOffset = 0; //滚动条偏移量
     private int currentItemIndex = 0; //当前滚动的位置所对应的item下标
+    private int currentWeatherRes = -1;
 
     private int maxTemp = 26;
     private int minTemp = 21;
@@ -185,7 +187,7 @@ public class Today24HourView extends View{
             //画温度的点
             onDrawTemp(canvas, i);
             //画表示天气图片
-            if(listItems.get(i).res != -1){
+            if(listItems.get(i).res != -1 && i != currentItemIndex){
                 Drawable drawable = ContextCompat.getDrawable(getContext(), listItems.get(i).res);
                 drawable.setBounds(point.x - DisplayUtil.dip2px(getContext(), 10),
                         point.y - DisplayUtil.dip2px(getContext(), 25),
@@ -218,9 +220,30 @@ public class Today24HourView extends View{
         if(currentItemIndex == i) {
             //计算提示文字的运动轨迹
             int Y = getTempBarY();
+            //画出背景图片
+            Drawable drawable = ContextCompat.getDrawable(getContext(), R.mipmap.hour_24_float);
+            drawable.setBounds(getScrollBarX(),
+                    Y - DisplayUtil.dip2px(getContext(), 24),
+                    getScrollBarX() + ITEM_WIDTH,
+                    Y - DisplayUtil.dip2px(getContext(), 4));
+            drawable.draw(canvas);
+            //画天气
+            int res = findCurrentRes(i);
+            if(res != -1) {
+                Drawable drawTemp = ContextCompat.getDrawable(getContext(), res);
+                drawTemp.setBounds(getScrollBarX()+ITEM_WIDTH/2 + (ITEM_WIDTH/2 - DisplayUtil.dip2px(getContext(), 18))/2,
+                        Y - DisplayUtil.dip2px(getContext(), 23),
+                        getScrollBarX()+ITEM_WIDTH - (ITEM_WIDTH/2 - DisplayUtil.dip2px(getContext(), 18))/2,
+                        Y - DisplayUtil.dip2px(getContext(), 5));
+                drawTemp.draw(canvas);
+
+            }
             //画出温度提示
+            int offset = ITEM_WIDTH/2;
+            if(res == -1)
+                offset = ITEM_WIDTH;
             Rect targetRect = new Rect(getScrollBarX(), Y - DisplayUtil.dip2px(getContext(), 24)
-                    , getScrollBarX() + ITEM_WIDTH, Y - DisplayUtil.dip2px(getContext(), 4));
+                    , getScrollBarX() + offset, Y - DisplayUtil.dip2px(getContext(), 4));
             Paint.FontMetricsInt fontMetrics = textPaint.getFontMetricsInt();
             int baseline = (targetRect.bottom + targetRect.top - fontMetrics.bottom - fontMetrics.top) / 2;
             textPaint.setTextAlign(Paint.Align.CENTER);
@@ -228,11 +251,23 @@ public class Today24HourView extends View{
         }
     }
 
+    private int findCurrentRes(int i) {
+        if(listItems.get(i).res != -1)
+            return listItems.get(i).res;
+        for(int k=i; k>=0; k--){
+            if(listItems.get(k).res != -1)
+                return listItems.get(k).res;
+        }
+        return -1;
+    }
+
     private void onDrawBox(Canvas canvas, Rect rect, int i) {
+        // 新建一个矩形
+        RectF boxRect = new RectF(rect);
         HourItem item = listItems.get(i);
         if(i == currentItemIndex) {
             windyBoxPaint.setAlpha(255);
-            canvas.drawRect(rect, windyBoxPaint);
+            canvas.drawRoundRect(boxRect, 4, 4, windyBoxPaint);
             //画出box上面的风力提示文字
             Rect targetRect = new Rect(getScrollBarX(), rect.top - DisplayUtil.dip2px(getContext(), 20)
                     , getScrollBarX() + ITEM_WIDTH, rect.top - DisplayUtil.dip2px(getContext(), 0));
@@ -242,7 +277,7 @@ public class Today24HourView extends View{
             canvas.drawText("风力" + item.windy + "级", targetRect.centerX(), baseline, textPaint);
         } else {
             windyBoxPaint.setAlpha(50);
-            canvas.drawRect(rect, windyBoxPaint);
+            canvas.drawRoundRect(boxRect, 4, 4, windyBoxPaint);
         }
     }
 
