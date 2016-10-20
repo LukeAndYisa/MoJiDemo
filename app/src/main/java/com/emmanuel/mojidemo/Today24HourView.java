@@ -80,7 +80,7 @@ public class Today24HourView extends View{
     private void init() {
         mWidth = MARGIN_LEFT_ITEM + MARGIN_RIGHT_ITEM + ITEM_SIZE * ITEM_WIDTH;
         mHeight = 500; //暂时先写死
-        tempBaseTop = (500 - bottomTextHeight)/3;
+        tempBaseTop = (500 - bottomTextHeight)/4;
         tempBaseBottom = (500 - bottomTextHeight)*2/3;
 
         initHourItems();
