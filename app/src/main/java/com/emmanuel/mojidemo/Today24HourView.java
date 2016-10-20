@@ -31,6 +31,7 @@ public class Today24HourView extends View{
     private static final int MARGIN_LEFT_ITEM = 100; //左边预留宽度
     private static final int MARGIN_RIGHT_ITEM = 100; //右边预留宽度
 
+    private static final int windyBoxAlpha = 80;
     private static final int windyBoxMaxHeight = 80;
     private static final int windyBoxMinHeight = 20;
     private static final int windyBoxSubHight = windyBoxMaxHeight - windyBoxMinHeight;
@@ -62,7 +63,12 @@ public class Today24HourView extends View{
             3, 4, 4, 4, 4,
             2, 2, 2, 3, 3,
             3, 5, 5, 5};
-    private static final int WEATHER_RES[] ={R.mipmap.w0, R.mipmap.w1, R.mipmap.w3};
+    private static final int WEATHER_RES[] ={R.mipmap.w0, R.mipmap.w1, R.mipmap.w3, -1, -1
+            ,R.mipmap.w5, R.mipmap.w7, R.mipmap.w9, -1, -1
+            ,-1, R.mipmap.w10, R.mipmap.w15, -1, -1
+            ,-1, -1, -1, -1, -1
+            ,R.mipmap.w18, -1, -1, R.mipmap.w19};
+
 
     public Today24HourView(Context context) {
         this(context, null);
@@ -109,8 +115,8 @@ public class Today24HourView extends View{
 
         windyBoxPaint = new Paint();
         windyBoxPaint.setTextSize(1);
-        windyBoxPaint.setColor(new Color().GRAY);
-        windyBoxPaint.setAlpha(50);
+        windyBoxPaint.setColor(new Color().WHITE);
+        windyBoxPaint.setAlpha(windyBoxAlpha);
         windyBoxPaint.setAntiAlias(true);
 
         textPaint = new TextPaint();
@@ -147,12 +153,7 @@ public class Today24HourView extends View{
             hourItem.windy = WINDY[i];
             hourItem.temperature = TEMP[i];
             hourItem.tempPoint = point;
-            if(i == 2 || i == 7 || i== 20)
-                hourItem.res = WEATHER_RES[0];
-            else if(i == 10 || i==23)
-                hourItem.res = WEATHER_RES[1];
-            else if(i == 4 || i== 16)
-                hourItem.res = WEATHER_RES[2];
+            hourItem.res = WEATHER_RES[i];
             listItems.add(hourItem);
         }
     }
@@ -261,6 +262,7 @@ public class Today24HourView extends View{
         return -1;
     }
 
+    //画底部风力的BOX
     private void onDrawBox(Canvas canvas, Rect rect, int i) {
         // 新建一个矩形
         RectF boxRect = new RectF(rect);
@@ -276,13 +278,13 @@ public class Today24HourView extends View{
             textPaint.setTextAlign(Paint.Align.CENTER);
             canvas.drawText("风力" + item.windy + "级", targetRect.centerX(), baseline, textPaint);
         } else {
-            windyBoxPaint.setAlpha(50);
+            windyBoxPaint.setAlpha(windyBoxAlpha);
             canvas.drawRoundRect(boxRect, 4, 4, windyBoxPaint);
         }
     }
 
+    //温度的折线,为了折线比较平滑，做了贝塞尔曲线
     private void onDrawLine(Canvas canvas, int i) {
-        //温度的折线,为了折线比较平滑，做了贝塞尔曲线
         linePaint.setColor(new Color().YELLOW);
         linePaint.setStrokeWidth(3);
         Point point = listItems.get(i).tempPoint;
