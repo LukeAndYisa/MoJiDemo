@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:background="#33000000"
+    android:padding="4dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_temp"
+        android:textSize="12sp"
+        android:textColor="#ffffff"
+        android:text="24°"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/iv_weather"
+        android:src="@mipmap/w7"
+        android:layout_marginLeft="4dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp" />
+
+</LinearLayout>
