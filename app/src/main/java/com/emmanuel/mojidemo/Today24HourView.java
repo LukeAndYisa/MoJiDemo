@@ -293,9 +293,9 @@ public class Today24HourView extends View{
             Path path = new Path();
             path.moveTo(pointPre.x, pointPre.y);
             if(i % 2 == 0)
-                path.cubicTo(pointPre.x, pointPre.y, (pointPre.x+point.x)/2, (pointPre.y+point.y)/2+14, point.x, point.y);
+                path.cubicTo((pointPre.x+point.x)/2, (pointPre.y+point.y)/2-7, (pointPre.x+point.x)/2, (pointPre.y+point.y)/2+7, point.x, point.y);
             else
-                path.cubicTo(pointPre.x, pointPre.y, (pointPre.x+point.x)/2, (pointPre.y+point.y)/2-14, point.x, point.y);
+                path.cubicTo((pointPre.x+point.x)/2, (pointPre.y+point.y)/2+7, (pointPre.x+point.x)/2, (pointPre.y+point.y)/2-7, point.x, point.y);
             canvas.drawPath(path, linePaint);
         }
     }
